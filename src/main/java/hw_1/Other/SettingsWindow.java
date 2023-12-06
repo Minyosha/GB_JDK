@@ -1,4 +1,4 @@
-package hw_1;
+package hw_1.Other;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

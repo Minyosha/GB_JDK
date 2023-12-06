@@ -1,4 +1,6 @@
-package hw_1;
+package hw_1.Chat;
+
+import hw_1.ServerRun.Server;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+
 
 /*
 Создать окно клиента чата. Окно должно содержать JtextField для ввода логина, пароля,
@@ -20,7 +24,7 @@ public class Chat extends JFrame {
     private static final int WINDOW_WIDTH = 800;
     private static final int WINDOW_POSX = 800;
     private static final int WINDOW_POSY = 300;
-    JButton btnSend = new JButton("Отправить.");
+    JButton btnSend = new JButton("Отправить");
     JButton btnConnect = new JButton("Подключиться");
     JButton btnDisconnect = new JButton("Отключиться");
     JLabel lblLogin = new JLabel("Login:");
@@ -42,7 +46,10 @@ public class Chat extends JFrame {
     String message;
     private String currentUser;
 
-    Chat() {
+    private Server server;
+
+    public Chat() {
+        this.server = server;
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocation(WINDOW_POSX, WINDOW_POSY);
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -109,13 +116,13 @@ public class Chat extends JFrame {
                     areaMessageHistory.append(loginMessage);
                     return;  // Выход из метода actionPerformed
                 }
-
                 String message = getFormattedDateTime() + txtFieldLogin.getText() + ": " + txtFieldMessage.getText();
                 areaMessageHistory.append(message);
                 areaMessageHistory.append("\n");
                 txtFieldMessage.setText("");
                 System.out.println("Отправлено сообщение: " + message);
                 writeStringToFile(message);
+
             }
         });
 
@@ -199,7 +206,7 @@ public class Chat extends JFrame {
     private void writeStringToFile(String str) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("Chat/history.txt", true))) {
             writer.write(str);
-            writer.newLine(); // Добавляет новую строку после вашей строки
+            writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
