@@ -146,7 +146,25 @@ public class DownloadManager {
         }
         String fileName = articleNumber + ".jpg";
         Path filePath = directoryPath.resolve(fileName);
-        Files.copy(url.openStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+//        Files.copy(url.openStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        boolean success = false;
+        int maxAttempts = 5;
+        int attempts = 0;
+
+        while (!success && attempts < maxAttempts) {
+            try {
+                Files.copy(url.openStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                success = true;
+            } catch (IOException e) {
+                attempts++;
+                System.out.println("An error occurred while copying file by thread " + Thread.currentThread().getName() + ". Retrying... Attempt: " + attempts);
+            }
+        }
+
+        if (!success) {
+            System.out.println("Failed to copy file for article " + articleNumber + " after " + maxAttempts + " attempts by thread " + Thread.currentThread().getName());
+        }
         System.out.println("Image downloaded successfully for article " + articleNumber + " by thread " + Thread.currentThread().getName());
     }
 }
